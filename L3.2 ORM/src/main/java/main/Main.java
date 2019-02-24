@@ -1,9 +1,13 @@
 package main;
 
 
-import dbService.DBException;
-import dbService.DBService;
-import dbService.dataSets.UsersDataSet;
+import services.AccountService;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
+import org.eclipse.jetty.util.log.Log;
+import servlets.SignInServlet;
+import servlets.SignUpServlet;
 
 /**
  * @author v.chibrikov
@@ -14,17 +18,21 @@ import dbService.dataSets.UsersDataSet;
  */
 public class Main {
     public static void main(String[] args) {
-        DBService dbService = new DBService();
-        dbService.printConnectInfo();
+        AccountService accountService = new AccountService();
+        // Jetty
+        ServletContextHandler servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
+        servletContextHandler.addServlet(new ServletHolder(new SignInServlet(accountService)),
+                "/signin");
+        servletContextHandler.addServlet(new ServletHolder(new SignUpServlet(accountService)),
+                "/signup");
 
+        Server server = new Server(8080);
+        server.setHandler(servletContextHandler);
         try {
-            long userId = dbService.addUser("tully");
-            System.out.println("Added user id: " + userId);
-
-            UsersDataSet dataSet = dbService.getUser(userId);
-            System.out.println("User data set: " + dataSet);
-
-        } catch (DBException e) {
+            server.start();
+            Log.getLog().info("Server started");
+            server.join();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

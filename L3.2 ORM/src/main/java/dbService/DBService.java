@@ -54,38 +54,11 @@ public class DBService {
         configuration.setProperty("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
         configuration.setProperty("hibernate.connection.driver_class", "org.h2.Driver");
         configuration.setProperty("hibernate.connection.url", "jdbc:h2:./h2db");
-        configuration.setProperty("hibernate.connection.username", "tully");
-        configuration.setProperty("hibernate.connection.password", "tully");
+        configuration.setProperty("hibernate.connection.username", "test");
+        configuration.setProperty("hibernate.connection.password", "test");
         configuration.setProperty("hibernate.show_sql", hibernate_show_sql);
         configuration.setProperty("hibernate.hbm2ddl.auto", hibernate_hbm2ddl_auto);
         return configuration;
-    }
-
-
-    public UsersDataSet getUser(long id) throws DBException {
-        try {
-            Session session = sessionFactory.openSession();
-            UsersDAO dao = new UsersDAO(session);
-            UsersDataSet dataSet = dao.get(id);
-            session.close();
-            return dataSet;
-        } catch (HibernateException e) {
-            throw new DBException(e);
-        }
-    }
-
-    public long addUser(String name) throws DBException {
-        try {
-            Session session = sessionFactory.openSession();
-            Transaction transaction = session.beginTransaction();
-            UsersDAO dao = new UsersDAO(session);
-            long id = dao.insertUser(name);
-            transaction.commit();
-            session.close();
-            return id;
-        } catch (HibernateException e) {
-            throw new DBException(e);
-        }
     }
 
     public void printConnectInfo() {
@@ -106,5 +79,9 @@ public class DBService {
         builder.applySettings(configuration.getProperties());
         ServiceRegistry serviceRegistry = builder.build();
         return configuration.buildSessionFactory(serviceRegistry);
+    }
+
+    public SessionFactory getSessionFactory() {
+        return sessionFactory;
     }
 }
