@@ -9,6 +9,14 @@ public class ResourceServer implements ResourceServerMBean {
         this.resource = new TestResource();
     }
 
+    public TestResource getResource() {
+        return resource;
+    }
+
+    public void setResource(TestResource resource) {
+        this.resource = resource;
+    }
+
     public ResourceServer(TestResource resource) {
         this.resource = resource;
     }
