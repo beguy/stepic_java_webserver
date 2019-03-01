@@ -17,7 +17,7 @@ import servlets.xml.reflection.ReflectionHelper;
 @SuppressWarnings("UnusedDeclaration")
 public class SaxHandler extends DefaultHandler {
     private static final Logger log = Log.getLogger(DefaultHandler.class);
-    private static final String CLASSNAME = "name";
+    private static final String CLASSNAME = "class";
     private String element = null;
     private Object object = null;
 
