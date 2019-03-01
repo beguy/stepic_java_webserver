@@ -35,6 +35,13 @@ public class Main {
         Servlet resourcesServlet = new ResourcesServlet(resourceServer);
         context.addServlet(new ServletHolder(resourcesServlet), "/resources");
         Server httpServer = new Server(8080);
-        log.info("Server started");
+        httpServer.setHandler(context);
+        try {
+            httpServer.start();
+            log.info("Server started");
+            httpServer.join();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

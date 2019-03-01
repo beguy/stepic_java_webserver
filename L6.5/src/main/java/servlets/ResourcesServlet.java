@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Objects;
 
 public class ResourcesServlet extends HttpServlet {
 
@@ -22,6 +23,11 @@ public class ResourcesServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String pathToResource = req.getParameter("path");
         TestResource resource = (TestResource) ReadXMLFileSAX.readXML(pathToResource);
-        resourceServer.setResource(resource);
+        if (!Objects.isNull(resource)) {
+            resourceServer.setResource(resource);
+            resp.setStatus(HttpServletResponse.SC_OK);
+        } else {
+            resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+        }
     }
 }
